@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Chat bot</title>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+<div class="container mx-auto p-4 flex-1 flex flex-col">
+    <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">SifoTalkAi</h1>
+
+    <div class="flex-1 overflow-y-auto mb-4 p-4 bg-white rounded-lg shadow">
+        <pre id="chat-messages" class="whitespace-pre-wrap break-words overflow-x-auto">
+            <!-- Chat messages will be inserted here -->
+        </pre>
+    </div>
+
+    <form id="chat-form" hx-post="/chat" hx-target="#chat-messages" hx-swap="beforeend" class="flex items-center">
+        <input
+                type="text"
+                name="message"
+                placeholder="Type your message..."
+                class="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+        >
+        <button
+                type="submit"
+                class="bg-green-700 text-white px-4 py-2 rounded-r-lg hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500">
+            Send
+        </button>
+    </form>
+</div>
+
+<script>
+    htmx.on("htmx:beforeRequest", function(evt) {
+        const messageInput = evt.detail.elt.querySelector('input[name="message"]');
+        const userMessage = messageInput.value;
+
+        // Display user's message in chat area
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.innerHTML += "<div class='user-message'>" + userMessage + "</div>";
+        chatMessages.scrollTop = chatMessages.scrollHeight;  // Scroll to bottom
+    });
+
+    htmx.on("htmx:afterRequest", function(evt) {
+        if (evt.detail.elt.tagName === "FORM") {
+            evt.detail.elt.reset();  // Reset the input field after sending
+        }
+    });
+</script>
+
+</body>
+</html>
