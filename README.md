@@ -1,4 +1,4 @@
-# Sifoitalkia - Spring Boot HTMX Application with Spring Integration and Spring AI
+# Sifoitalkia - Spring Boot HTMX Application with Spring AI
 
 ## Overview
 
